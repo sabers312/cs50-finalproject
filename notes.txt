@@ -1,0 +1,13 @@
+
+15.01.2023
+
+    https://flask.palletsprojects.com/en/2.2.x/quickstart/
+    https://code.visualstudio.com/docs/python/tutorial-flask#_create-and-run-a-minimal-flask-app
+    - quickstart on flask
+
+    https://stackoverflow.com/questions/65100873/simple-flask-app-runs-but-page-will-not-load
+    - port 5000 & 6000 were not responding, used port 5050 instead.
+
+    https://stackoverflow.com/questions/17309889/how-to-debug-a-flask-app
+    https://flask.palletsprojects.com/en/2.2.x/debugging/
+    - how to turn on debugger in flask
