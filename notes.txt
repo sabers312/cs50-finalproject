@@ -11,3 +11,9 @@
     https://stackoverflow.com/questions/17309889/how-to-debug-a-flask-app
     https://flask.palletsprojects.com/en/2.2.x/debugging/
     - how to turn on debugger in flask
+
+    https://www.sqlitetutorial.net/sqlite-unique-constraint/
+    - how to create 2 unique columsn in sqlite3
+
+    https://medium.com/analytics-vidhya/how-to-use-flask-login-with-sqlite3-9891b3248324
+    - setting up login in flask/python
