@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Cocktail recipe
+{% endblock %}
+
+{% block main %}
+
+    <div class="card mb-3 text-start" >
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ cocktail["strDrinkThumb"] }}" class="img-fluid rounded-start" alt="{{ cocktail["strDrink"] }}">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{ cocktail["strDrink"] }}</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Ingredients</th>
+                                <th>Measure</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for i in range(15) %}
+                                {% if cocktail["strIngredient"+(i | string )] %}
+                                <tr>
+                                    <td>{{ cocktail["strIngredient"+(i | string )] }}</td>
+                                    <td>{{ cocktail["strMeasure"+(i | string )] }}</td>
+                                </tr>
+                                {% else %}
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <p class="card-text">{{ cocktail["strInstructions"] }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}

@@ -3,7 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required, cocktail_lu
+from helpers import login_required, cocktail_lu, recipe_lu
 
 
 app = Flask(__name__)
@@ -26,6 +26,8 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+"""global varuables"""
+cocktails = {} #to be used in cocktail_lookup and basis for cocktail recipe
 
 @app.route("/")
 def index():
@@ -124,3 +126,11 @@ def cocktail_lookup():
         return render_template("cocktail_lookup_result.html", cocktails=cocktails)
 
     return render_template("cocktail_lookup.html")
+
+@app.route("/cocktail_recipe")
+@login_required
+def cocktail_recipe():
+
+    cocktail = recipe_lu(request.args.get("idDrink"))
+    
+    return render_template("cocktail_recipe.html", cocktail=cocktail)
