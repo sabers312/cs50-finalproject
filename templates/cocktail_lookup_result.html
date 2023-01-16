@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Cocktail lookup result
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-start">Picture</th>
+                <th class="text-start">Name</th>
+                <th class="text-end">Ingredients</th>
+                <th class="text-end">Measures</th>
+                <th class="text-end">Instructions</th>
+                <th class="text-middle">Want to make</th>
+                <th class="text-middle">Have made</th>
+                <th class="text-end">Add to list</th>
+            </tr>
+        </thead>
+    
+        <tbody>
+            {% for cocktail in cocktails %}
+                <tr>
+                    <td class="text-start"><img src="{{ cocktail["strDrinkThumb"] }}" width="50px"></td>
+                    <td class="text-start">{{ cocktail["strDrink"] }}</td>
+                    {% set i = 1 %}
+                    {% for i in range(6) %}
+                    <td class="text-end">
+                        <table>
+                            <tr>
+                                <td>{{ cocktail["strIngredient"+ (i | string)] }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    {% endfor %}
+                    {% for i in range(6) %}
+                    <td class="text-end">
+                        <table>
+                            <tr>
+                                <td>{{ cocktail["strMeasure"+ (i | string)] }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    {% endfor %}
+                    <td class="text-end">placeholder</td>
+                    <td class="text-end">Want to make Placeholder</td>
+                    <td class="text-end">Have made Placeholder</td>
+                    <td class="text-end">Add to list Placeholder</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+
+{% endblock %}

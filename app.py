@@ -3,7 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required
+from helpers import login_required, cocktail_lu
 
 
 app = Flask(__name__)
@@ -111,3 +111,16 @@ def logout():
     flash("Logged out!")
 
     return redirect("/")
+
+
+@app.route("/cocktail_lookup", methods=["GET", "POST"])
+@login_required
+def cocktail_lookup():
+    
+    if request.method == "POST":
+        cocktails = cocktail_lu(request.form.get("cocktail"))
+
+        #flash(cocktails[0]["strIngredient"+str(1)])
+        return render_template("cocktail_lookup_result.html", cocktails=cocktails)
+
+    return render_template("cocktail_lookup.html")
