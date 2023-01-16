@@ -5,53 +5,45 @@
 {% endblock %}
 
 {% block main %}
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th class="text-start">Picture</th>
-                <th class="text-start">Name</th>
-                <th class="text-end">Ingredients</th>
-                <th class="text-end">Measures</th>
-                <th class="text-end">Instructions</th>
-                <th class="text-middle">Want to make</th>
-                <th class="text-middle">Have made</th>
-                <th class="text-end">Add to list</th>
-            </tr>
-        </thead>
-    
-        <tbody>
-            {% for cocktail in cocktails %}
-                <tr>
-                    <td class="text-start"><img src="{{ cocktail["strDrinkThumb"] }}" width="50px"></td>
-                    <td class="text-start">{{ cocktail["strDrink"] }}</td>
-                    {% set i = 1 %}
-                    {% for i in range(6) %}
-                    <td class="text-end">
-                        <table>
-                            <tr>
-                                <td>{{ cocktail["strIngredient"+ (i | string)] }}</td>
-                            </tr>
-                        </table>
-                    </td>
-                    {% endfor %}
-                    {% for i in range(6) %}
-                    <td class="text-end">
-                        <table>
-                            <tr>
-                                <td>{{ cocktail["strMeasure"+ (i | string)] }}</td>
-                            </tr>
-                        </table>
-                    </td>
-                    {% endfor %}
-                    <td class="text-end">placeholder</td>
-                    <td class="text-end">Want to make Placeholder</td>
-                    <td class="text-end">Have made Placeholder</td>
-                    <td class="text-end">Add to list Placeholder</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-        </tfoot>
-    </table>
-
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for cocktail in cocktails %}
+                <div class="col">
+                    <div class="card h-100 text-start">
+                        <img  src="{{ cocktail["strDrinkThumb"] }}" class="card-img-top" alt="{{ cocktail["strDrink"] }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ cocktail["strDrink"] }}</h5>
+                            <div class="accordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Ingredients
+                                        </button>
+                                    </h2>
+                                    <div class="accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>ingredient 1</p>
+                                            <p>ingredient 2</p>
+                                            <p>ingredient 3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                            Instructions
+                                        </button>
+                                    </h2>
+                                    <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p class="card-text">{{ cocktail["strInstructions"][:200] }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" class="btn btn-primary">Make me</a>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
 {% endblock %}
