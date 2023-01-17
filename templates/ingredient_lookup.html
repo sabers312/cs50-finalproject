@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Ingredient lookup
+{% endblock %}
+
+{% block main %}
+    <form action="/ingredient_lookup" method="post">
+        <input autocomplete="off" autofocus name="ingredient" placeholder="Input Ingredient name" type="text">
+        <button type="submit">Look up Cocktail</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Ingredient lookup result
+{% endblock %}
+
+{% block main %}
+    <div class="row row-cols-1 row-cols-md-5 g-4">
+        {% for ingredient in ingredients %}
+                <div class="col">
+                    <div class="card h-100 text-start">
+                        <img alt="{{ ingredient["strDrink"] }}" class="card-img-top" src="{{ ingredient["strDrinkThumb"] }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ ingredient["strIngredient"] }}</h5>
+                            <p class="card-text">Type: {{ ingredient["strType"] }}</p>
+                            <p class="card-text">Alcoholic: {{ ingredient["strAlcohol"] }}</p>
+                            <p class="card-text">ABV: {{ ingredient["strABV"] }}</p>
+                            <a href="/cocktail_recipe?idDrink={{ ingredient["idDrink"] }}" class="btn btn-primary stretched-link">Make me</a>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
+{% endblock %}
