@@ -64,3 +64,20 @@ def ingredient_lu(ingredient_name):
         return None
     
     return response.json()["ingredients"]
+
+
+"""lookup ingredient by name search"""
+def ingredientId_lu(ingredient_id):
+    try:
+        url = "https://the-cocktail-db.p.rapidapi.com/search.php"
+        querystring = {"iid": ingredient_id}
+        headers = {
+            "X-RapidAPI-Key": "e5fb1c3756mshb2c2caf3ff051bep17550djsndcf1006181e8",
+            "X-RapidAPI-Host": "the-cocktail-db.p.rapidapi.com"
+        }
+        response = requests.request("GET", url, headers=headers, params=querystring)
+    
+    except requests.RequestException:
+        return None
+    
+    return response.json()["ingredients"]

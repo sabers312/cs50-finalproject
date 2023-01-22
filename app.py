@@ -146,3 +146,47 @@ def ingredient_lookup():
         return render_template("ingredient_lookup_result.html", ingredients=ingredients)
 
     return render_template("ingredient_lookup.html")
+
+
+@app.route("/add_ingredient")
+@login_required
+def add_ingredient():
+
+    api_id = request.args.get("idDrink")
+    ingredient_name = request.args.get("name")
+    ingredient_type = request.args.get("type")
+    alcohol = request.args.get("alcohol")
+    abv = request.args.get("abv")
+
+    #check if ingredient already in database
+    if db.execute("SELECT api_id FROM ingredients WHERE user_id = ? AND api_id = ?", session["user_id"], api_id):
+
+        flash("Ingredient is already in your ingredient list!")
+        return redirect("/ingredient_lookup")
+
+    db.execute("INSERT INTO ingredients (user_id, api_id, name, type, alcohol, abv) VALUES(?,?,?,?, ?, ?)", session["user_id"], api_id, ingredient_name, ingredient_type, alcohol, abv)
+
+    flash(ingredient_name + " added to your ingredient list!")
+    return redirect("/ingredient_lookup")
+
+
+@app.route("/ingredient_list")
+@login_required
+def ingredient_list():
+    
+    ingredients = db.execute("SELECT id, api_id, name, type FROM ingredients WHERE user_id = ?", session["user_id"])
+
+    return render_template("ingredient_list.html", ingredients=ingredients)
+
+
+@app.route("/remove_ingredient")
+@login_required
+def remove_ingredient():
+
+    ingredient_id = request.args.get("id")
+    ingredient_name = request.args.get("name")
+
+    db.execute("DELETE FROM ingredients WHERE user_id = ? AND id = ?", session["user_id"], ingredient_id)
+
+    flash(ingredient_name + " removed from your ingredient list!")
+    return redirect("/ingredient_list")
