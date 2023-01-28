@@ -18,48 +18,44 @@ def login_required(f):
     return decorated_function
 
 
+API_KEY = 1
+
+
 """lookup cocktails by name search"""
 def cocktail_lu(cocktail_name):
-    try:
-        url = "https://the-cocktail-db.p.rapidapi.com/search.php"
+    try:        
+        url = f"https://www.thecocktaildb.com/api/json/v1/{API_KEY}/search.php"
         querystring = {"s": cocktail_name}
-        headers = {
-            "X-RapidAPI-Key": "e5fb1c3756mshb2c2caf3ff051bep17550djsndcf1006181e8",
-            "X-RapidAPI-Host": "the-cocktail-db.p.rapidapi.com"
-        }
-        response = requests.request("GET", url, headers=headers, params=querystring)
+
+        response = requests.request("GET", url, params=querystring)
     
     except requests.RequestException:
         return None
 
     return response.json()["drinks"]
 
+
 """lookup single cocktail by idDrink"""
 def recipe_lu(idDrink):
     try:
-        url = "https://the-cocktail-db.p.rapidapi.com/lookup.php"
+        url = f"https://www.thecocktaildb.com/api/json/v1/{API_KEY}/lookup.php"
         querystring = {"i": idDrink}
-        headers = {
-        "X-RapidAPI-Key": "e5fb1c3756mshb2c2caf3ff051bep17550djsndcf1006181e8",
-        "X-RapidAPI-Host": "the-cocktail-db.p.rapidapi.com"
-        }
-        response = requests.request("GET", url, headers=headers, params=querystring)
+
+        response = requests.request("GET", url, params=querystring)
 
     except requests.RequestException:
         return None
 
     return response.json()["drinks"][0]
 
+
 """lookup ingredient by name search"""
 def ingredient_lu(ingredient_name):
     try:
-        url = "https://the-cocktail-db.p.rapidapi.com/search.php"
+        url = f"https://www.thecocktaildb.com/api/json/v1/{API_KEY}/search.php"
         querystring = {"i": ingredient_name}
-        headers = {
-            "X-RapidAPI-Key": "e5fb1c3756mshb2c2caf3ff051bep17550djsndcf1006181e8",
-            "X-RapidAPI-Host": "the-cocktail-db.p.rapidapi.com"
-        }
-        response = requests.request("GET", url, headers=headers, params=querystring)
+
+        response = requests.request("GET", url, params=querystring)
     
     except requests.RequestException:
         return None
@@ -67,16 +63,13 @@ def ingredient_lu(ingredient_name):
     return response.json()["ingredients"]
 
 
-"""lookup ingredient by name search"""
+"""lookup ingredient by id search - FUNCTION NOT USED"""
 def ingredientId_lu(ingredient_id):
     try:
-        url = "https://the-cocktail-db.p.rapidapi.com/search.php"
+        url = f"https://www.thecocktaildb.com/api/json/v1/{API_KEY}/search.php"
         querystring = {"iid": ingredient_id}
-        headers = {
-            "X-RapidAPI-Key": "e5fb1c3756mshb2c2caf3ff051bep17550djsndcf1006181e8",
-            "X-RapidAPI-Host": "the-cocktail-db.p.rapidapi.com"
-        }
-        response = requests.request("GET", url, headers=headers, params=querystring)
+
+        response = requests.request("GET", url, params=querystring)
     
     except requests.RequestException:
         return None
@@ -88,7 +81,8 @@ def ingredientId_lu(ingredient_id):
 def filter_multiingredients(my_ingredients):
     try: 
         url = "https://the-cocktail-db.p.rapidapi.com/filter.php"
-        querystring = {"i": my_ingredients}
+        #querystring = {"i": ["anis,dry vermouth,gin", "lime,light rum,powdered sugar"]}
+        querystring = {"i": ','.join(my_ingredients)}
         headers = {
             "X-RapidAPI-Key": "e5fb1c3756mshb2c2caf3ff051bep17550djsndcf1006181e8",
             "X-RapidAPI-Host": "the-cocktail-db.p.rapidapi.com"
