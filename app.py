@@ -3,7 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required, cocktail_lu, recipe_lu, ingredient_lu
+from helpers import login_required, cocktail_lu, recipe_lu, ingredient_lu, filter_multiingredients
 
 
 app = Flask(__name__)
@@ -174,7 +174,7 @@ def add_ingredient():
 @login_required
 def ingredient_list():
     
-    ingredients = db.execute("SELECT id, api_id, name, type FROM ingredients WHERE user_id = ?", session["user_id"])
+    ingredients = db.execute("SELECT * FROM ingredients WHERE user_id = ?", session["user_id"])
 
     return render_template("ingredient_list.html", ingredients=ingredients)
 
@@ -190,3 +190,18 @@ def remove_ingredient():
 
     flash(ingredient_name + " removed from your ingredient list!")
     return redirect("/ingredient_list")
+
+
+@app.route("/my_bar")
+@login_required
+def my_bar():
+
+    my_ingredients = db.execute("SELECT name FROM ingredients WHERE user_id = ?", session["user_id"])
+    my_ingredients_list = []
+    for ingredient in my_ingredients:
+        my_ingredients_list.append(ingredient["name"])
+
+    my_cocktails = filter_multiingredients(my_ingredients_list)
+
+    #flash(my_cocktails)
+    return render_template("my_bar.html", cocktails=my_cocktails)

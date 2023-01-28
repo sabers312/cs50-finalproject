@@ -3,6 +3,7 @@ from functools import wraps
 
 import requests #required for API requests
 
+
 def login_required(f):
     """
     Decorate routes to require login.
@@ -30,7 +31,7 @@ def cocktail_lu(cocktail_name):
     
     except requests.RequestException:
         return None
-    
+
     return response.json()["drinks"]
 
 """lookup single cocktail by idDrink"""
@@ -81,3 +82,20 @@ def ingredientId_lu(ingredient_id):
         return None
     
     return response.json()["ingredients"]
+
+
+"""filter cocktails by multi-ingredients"""
+def filter_multiingredients(my_ingredients):
+    try: 
+        url = "https://the-cocktail-db.p.rapidapi.com/filter.php"
+        querystring = {"i": my_ingredients}
+        headers = {
+            "X-RapidAPI-Key": "e5fb1c3756mshb2c2caf3ff051bep17550djsndcf1006181e8",
+            "X-RapidAPI-Host": "the-cocktail-db.p.rapidapi.com"
+        }
+        response = requests.request("GET", url, headers=headers, params=querystring)
+    
+    except requests.RequestException:
+        return None
+
+    return response.json()["drinks"]

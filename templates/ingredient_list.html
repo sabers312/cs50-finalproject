@@ -13,8 +13,8 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ ingredient["name"] }}</h5>
                             <p class="card-text">Type: {{ ingredient["type"] }}</p>
-                            <p class="card-text">Alcoholic: {{ ingredient["strAlcohol"] }}</p>
-                            <p class="card-text">ABV: {{ ingredient["strABV"] }}</p>
+                            <p class="card-text">Alcoholic: {{ ingredient["alcohol"] }}</p>
+                            <p class="card-text">ABV: {{ ingredient["abv"] }}</p>
                             <a href="/remove_ingredient?id={{ ingredient["id"] }}&name={{ ingredient["name"] }}" class="btn btn-primary stretched-link">Remove me from your bar</a>
                         </div>
                     </div>

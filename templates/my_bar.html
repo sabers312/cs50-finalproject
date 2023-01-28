@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Ingredient List
+{% endblock %}
+
+{% block main %}
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for cocktail in cocktails %}
+                <div class="col">
+                    <div class="card h-100 text-start">
+                        <img alt="{{ cocktail["strDrink"] }}" class="card-img-top" src="{{ cocktail["strDrinkThumb"] }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ cocktail["strDrink"] }}</h5>
+                            <a href="/cocktail_recipe?idDrink={{ cocktail["idDrink"] }}" class="btn btn-primary stretched-link">Make me</a>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
+{% endblock %}
