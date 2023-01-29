@@ -218,7 +218,7 @@ def my_bar():
     for row in ingr_combinations:
         my_cocktails.extend(filter_multiingredients(row))
 
-    # remove duplicates from my_cocktails / get distinct list of cocktails from my_cocktails
+    # remove duplicate cocktails from my_cocktails / get distinct list of cocktails from my_cocktails
     my_cocktails = list(
         {
             drink["idDrink"]: drink
