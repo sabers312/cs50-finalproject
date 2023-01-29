@@ -133,8 +133,20 @@ def cocktail_lookup():
 def cocktail_recipe():
 
     cocktail = recipe_lu(request.args.get("idDrink"))
+
+    my_ingredients = db.execute("SELECT * FROM ingredients WHERE user_id = ?", session["user_id"])
+    my_ingredients_list = []
+    for ingredient in my_ingredients:
+        my_ingredients_list.append(ingredient["name"])
     
-    return render_template("cocktail_recipe.html", cocktail=cocktail)
+    cocktail_ingredients = []
+    for i in range(1, 15):
+        if cocktail["strIngredient"+str(i)]:
+            cocktail_ingredients.append(cocktail["strIngredient"+str(i)])
+    # 29.01.2023 - NEXT STEP - where mismatch in ingredients compare type of cocktail_ingredients with type of my_ingredient_list
+
+    flash(cocktail_ingredients)
+    return render_template("cocktail_recipe.html", cocktail=cocktail, my_ingredients_list=my_ingredients_list)
 
 
 @app.route("/ingredient_lookup", methods=["GET", "POST"])
