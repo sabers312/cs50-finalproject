@@ -2,6 +2,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from itertools import combinations #consider moving later to helpers.py
 
 from helpers import login_required, cocktail_lu, recipe_lu, ingredient_lu, filter_multiingredients
 
@@ -196,12 +197,42 @@ def remove_ingredient():
 @login_required
 def my_bar():
 
+    # pulls user's ingredients as dict
     my_ingredients = db.execute("SELECT name FROM ingredients WHERE user_id = ?", session["user_id"])
+    
+    # stores ingredients in list, instead of dict
     my_ingredients_list = []
     for ingredient in my_ingredients:
         my_ingredients_list.append(ingredient["name"])
 
-    my_cocktails = filter_multiingredients(my_ingredients_list)
+    my_cocktails = []
+    #my_cocktails = filter_multiingredients(my_ingredients_list)
 
-    #flash(my_cocktails)
+    # generate all possible ingredient combination, with minimum 2 ingredients
+    ingr_combinations = []
+    for length in range(2, len(my_ingredients_list)+1):
+        for subset in combinations(my_ingredients_list, length):
+            ingr_combinations.append(subset)
+
+    # create (non-distinct) list of cocktails based on all possible ingredient combinations
+    for row in ingr_combinations:
+        my_cocktails.extend(filter_multiingredients(row))
+
+    # remove duplicates from my_cocktails / get distinct list of cocktails from my_cocktails
+    my_cocktails = list(
+        {
+            drink["idDrink"]: drink
+            for drink in my_cocktails
+        }.values()
+    )
+
+    # remove drinks with missing ingredients
+#    for drink in my_cocktails:
+#        drink_ingredients = recipe_lu(drink("idDrink"))
+#        for i in range(15):
+#            if drink_ingredients("strIngredient"+str(i)) in my_ingredients_list:
+#                return
+
+
+    #flash(my_ingredients_list)
     return render_template("my_bar.html", cocktails=my_cocktails)

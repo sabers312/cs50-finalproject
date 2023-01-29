@@ -21,3 +21,16 @@
 
     https://medium.com/analytics-vidhya/how-to-use-flask-login-with-sqlite3-9891b3248324
     - setting up login in flask/python
+
+
+29.01.2023
+    
+    https://stackoverflow.com/questions/464864/how-to-get-all-possible-combinations-of-a-list-s-elements
+    https://docs.python.org/3/library/itertools.html
+    - creating combination subsets from list of ingredients
+    
+    https://www.w3schools.com/python/ref_func_range.asp
+    - understanding range funcation, namely rante(start, stop) for the ingredient combinations
+
+    https://bobbyhadz.com/blog/python-get-list-of-unique-dictionaries
+    - distinct list of dictionaries python

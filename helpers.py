@@ -81,8 +81,8 @@ def ingredientId_lu(ingredient_id):
 def filter_multiingredients(my_ingredients):
     try: 
         url = "https://the-cocktail-db.p.rapidapi.com/filter.php"
-        #querystring = {"i": ["anis,dry vermouth,gin", "lime,light rum,powdered sugar"]}
-        querystring = {"i": ','.join(my_ingredients)}
+        querystring = {"i": "gin,dry vermouth"}
+        #querystring = {"i": ','.join(my_ingredients)}
         headers = {
             "X-RapidAPI-Key": "e5fb1c3756mshb2c2caf3ff051bep17550djsndcf1006181e8",
             "X-RapidAPI-Host": "the-cocktail-db.p.rapidapi.com"
@@ -93,3 +93,17 @@ def filter_multiingredients(my_ingredients):
         return None
 
     return response.json()["drinks"]
+
+
+# Pull list of cocktails based on full ingredient list
+
+    # pull list of cocktails based on subset of ingredient list AS LONG AS subset of ingredient list > 1
+
+# store all first iteration of list of cocktails in a dict
+
+# check ingredients of all cocktails in the dict against the users ingredients
+    # if 100% match, keep the cocktail
+    # if < 100% match
+        # check mismatching ingredient type
+        # if match, suggest match
+        # if no match, remove cocktail
