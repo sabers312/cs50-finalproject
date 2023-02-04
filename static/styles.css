@@ -5,3 +5,9 @@
     border-top-color: rgb(14, 5, 2);
     border-top-width: 2px;
 }
+
+.alt_ingredients-tooltip
+{
+    /*--bs-tooltip-bg: var(--bs-primary);*/
+    text-align: left;
+}

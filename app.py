@@ -135,18 +135,66 @@ def cocktail_recipe():
     cocktail = recipe_lu(request.args.get("idDrink"))
 
     my_ingredients = db.execute("SELECT * FROM ingredients WHERE user_id = ?", session["user_id"])
-    my_ingredients_list = []
-    for ingredient in my_ingredients:
-        my_ingredients_list.append(ingredient["name"])
     
-    cocktail_ingredients = []
+    my_ingredients_list = []
+    my_ingredient_name_list = []
+    my_ingredient_type_list = []
+    my_ingredients_by_type = {}
+    for ingredient in my_ingredients:
+        my_ingredients_list.append({"name": ingredient["name"], "type": ingredient["type"]})
+        my_ingredient_name_list.append(ingredient["name"])
+        my_ingredient_type_list.append(ingredient["type"])
+
+        """populating dict variable: my_ingredients_by_type"""
+        if ingredient["type"] == "None": #passes over all ingredients whose type is "None"
+            pass
+        elif ingredient["type"] not in my_ingredients_by_type.keys(): # adds key:value pair for first appearance of a key - the value is added as a list, thereby allowing to add several values
+            my_ingredients_by_type.update({ingredient["type"]: [ingredient["name"]]})
+        else: # adds ingredient value to key as additional list item
+            my_ingredients_by_type[ingredient["type"]] += [ingredient["name"]]
+
+
+
+    
+    cocktail_ingredients_list = []
     for i in range(1, 15):
         if cocktail["strIngredient"+str(i)]:
-            cocktail_ingredients.append(cocktail["strIngredient"+str(i)])
-    # 29.01.2023 - NEXT STEP - where mismatch in ingredients compare type of cocktail_ingredients with type of my_ingredient_list
+            cocktail_ingredients_list.append({"name": cocktail["strIngredient"+str(i)], "type": ingredient_lu(cocktail["strIngredient"+str(i)])[0]["strType"]}) 
+    
+    """split into for loop in order to reduce api calls"""
+    cocktail_ingredients_name_list = []
+    cocktail_ingredients_type_list = []
+    for ingredient in cocktail_ingredients_list:
+        cocktail_ingredients_name_list.append(ingredient["name"])
+        cocktail_ingredients_type_list.append(ingredient["type"])
+    
+    cocktail_nam_typ_dict = {}
+    for ingredient in cocktail_ingredients_list:
+        cocktail_nam_typ_dict.update({ingredient["name"]: ingredient["type"]})
 
-    flash(cocktail_ingredients)
-    return render_template("cocktail_recipe.html", cocktail=cocktail, my_ingredients_list=my_ingredients_list)
+    alt_type = []
+    for ingredient in my_ingredient_name_list:
+        if ingredient in cocktail_ingredients_name_list:
+            pass
+       #elif ingredient not in cocktail_ingredients_name_list:
+    for ingr in cocktail_ingredients_name_list:
+        if ingr in cocktail_nam_typ_dict.keys():
+            alt_type.append(cocktail_nam_typ_dict[ingr])
+
+    alt_ing_by_type = {}
+    for cocktail_ingr_type in cocktail_ingredients_type_list:
+        if cocktail_ingr_type in my_ingredients_by_type.keys():
+            alt_ing_by_type[cocktail_ingr_type] = my_ingredients_by_type[cocktail_ingr_type]
+
+        #elif :
+        #    ingr_type = 0
+        else:
+            blue = "it didn't work"
+
+    #04.02.2023 - CLEAN UP THIS SECTION!!
+
+    #flash(alt_ing_by_type)
+    return render_template("cocktail_recipe.html", cocktail=cocktail, my_ingredient_name_list=my_ingredient_name_list, alt_ing_by_type=alt_ing_by_type, cocktail_nam_typ_dict=cocktail_nam_typ_dict)
 
 
 @app.route("/ingredient_lookup", methods=["GET", "POST"])
