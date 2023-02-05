@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Cocktail Lists
+{% endblock %}
+
+{% block main %}
+    {% if my_cocktail_list %}
+        {% for list_item in my_cocktail_list %}
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                <div class="col">
+                    <div class="card h-100 text-start">
+                        <img alt="{{ list_item["strDrink"] }}" class="card-img-top" src="{{ list_item["strDrinkThumb"] }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ cocktail["strDrink"] }}</h5>
+                            <p class="card-text">{{ cocktail["strInstructions"][:200] }}</p>
+                            <a href="/cocktail_recipe?idDrink={{ cocktail["idDrink"] }}" class="btn btn-primary stretched-link">Make me</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% elif my_cocktail_lists %}
+            <h3>You have the following lists:</h3>
+            {% for lists in my_cocktail_lists %}
+                <ul>
+                    <li>{{ lists["name"] }}</li>
+                </ul>
+                <p>but they are empty</p>
+            {% endfor %}
+            <h3>Create new list</h3>
+            <form action="/create_list" method="post">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Type list name" aria-label="Type list name" aria-describedby="button-addon2" name="list_name">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Create list</button>
+                </div>
+            </form>
+    {% else %}
+        <h3>You have no lists! Create one now</h3>
+        <form action="/create_list" method="post">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Type list name" aria-label="Type list name" aria-describedby="button-addon2" name="list_name">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Create list</button>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}

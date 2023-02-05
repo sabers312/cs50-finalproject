@@ -68,8 +68,38 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <h5 class="card-subtitle">Instructions</h5>
-                    <p class="card-text">{{ cocktail["strInstructions"] }}</p>
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-subtitle">Instructions</h5>
+                            <p class="card-text">{{ cocktail["strInstructions"] }}</p>
+                        </div>
+                        <div class="col-5 mt-2">
+                            {% if my_cocktail_lists %}
+                                <form action="/add_list">
+                                    <div class="input-group">
+                                        <select class="form-select" id="inputGroupSelect04" name="cocktail_data">
+                                            <option disabled selected>Choose list to add</option>
+
+                                                {% for list_item in my_cocktail_lists %}
+                                                    <option value='list_name={{ list_item["name"] }}&cocktail_id={{ cocktail["idDrink"] }}&cocktail_name={{ cocktail["strDrink"] }}&thumb_url={{ cocktail["strDrinkThumb"] }}'>{{ list_item["name"] }}</option>
+                                                {% endfor%}
+                                        </select>
+                                        <button class="btn btn-outline-secondary" type="submit">Add</button>
+                                    </div>
+                                </form>
+                            {% else %}
+                                <form action="/create_list">
+                                    <div class="input-group">
+                                        <select class="form-select" id="inputGroupSelect04">
+                                            <option disabled selected>Choose list to add</option>
+                                                <option>No lists - Create one!</option>
+                                        </select>
+                                        <button class="btn btn-outline-secondary" type="submit">Add</button>
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from itertools import combinations #consider moving later to helpers.py
+import json
 
 from helpers import login_required, cocktail_lu, recipe_lu, ingredient_lu, filter_multiingredients
 
@@ -132,6 +133,10 @@ def cocktail_lookup():
 @login_required
 def cocktail_recipe():
 
+    #if request.args.get("create"):
+    #    return redirect("/cocktail_lists")
+
+
     cocktail = recipe_lu(request.args.get("idDrink"))
 
     my_ingredients = db.execute("SELECT * FROM ingredients WHERE user_id = ?", session["user_id"])
@@ -153,9 +158,6 @@ def cocktail_recipe():
         else: # adds ingredient value to key as additional list item
             my_ingredients_by_type[ingredient["type"]] += [ingredient["name"]]
 
-
-
-    
     cocktail_ingredients_list = []
     for i in range(1, 15):
         if cocktail["strIngredient"+str(i)]:
@@ -186,15 +188,18 @@ def cocktail_recipe():
         if cocktail_ingr_type in my_ingredients_by_type.keys():
             alt_ing_by_type[cocktail_ingr_type] = my_ingredients_by_type[cocktail_ingr_type]
 
-        #elif :
-        #    ingr_type = 0
-        else:
-            blue = "it didn't work"
-
     #04.02.2023 - CLEAN UP THIS SECTION!!
 
+
+    my_cocktail_lists = db.execute("SELECT * FROM list_names WHERE user_id = ? AND category = 'cocktail'", session["user_id"])
+
     #flash(alt_ing_by_type)
-    return render_template("cocktail_recipe.html", cocktail=cocktail, my_ingredient_name_list=my_ingredient_name_list, alt_ing_by_type=alt_ing_by_type, cocktail_nam_typ_dict=cocktail_nam_typ_dict)
+    return render_template("cocktail_recipe.html", 
+        cocktail=cocktail, 
+        my_ingredient_name_list=my_ingredient_name_list, 
+        alt_ing_by_type=alt_ing_by_type, 
+        cocktail_nam_typ_dict=cocktail_nam_typ_dict, 
+        my_cocktail_lists=my_cocktail_lists)
 
 
 @app.route("/ingredient_lookup", methods=["GET", "POST"])
@@ -286,13 +291,46 @@ def my_bar():
         }.values()
     )
 
-    # remove drinks with missing ingredients
-#    for drink in my_cocktails:
-#        drink_ingredients = recipe_lu(drink("idDrink"))
-#        for i in range(15):
-#            if drink_ingredients("strIngredient"+str(i)) in my_ingredients_list:
-#                return
-
-
     #flash(my_ingredients_list)
     return render_template("my_bar.html", cocktails=my_cocktails)
+
+
+@app.route("/cocktail_lists")
+@login_required
+def cocktail_lists():
+
+    my_cocktail_list = db.execute("SELECT * FROM cocktail_lists WHERE user_id = ?", session["user_id"])
+    my_cocktail_lists = db.execute("SELECT * FROM list_names WHERE user_id = ? AND category = 'cocktail'", session["user_id"])
+
+    #flash(my_cocktail_list)
+    return render_template("cocktail_lists.html", my_cocktail_list=my_cocktail_list, my_cocktail_lists=my_cocktail_lists)
+
+
+@app.route("/create_list", methods=["GET", "POST"])
+@login_required
+def create_list():
+
+    if request.method == "POST":
+        category = "cocktail"
+        list_name = request.form.get("list_name")
+
+        db.execute("INSERT INTO list_names (user_id, category, name) VALUES(?,?,?)", session["user_id"], category, list_name)
+
+        flash(list_name + " added to your cocktail lists!")
+        return redirect("/cocktail_lists")
+
+    return redirect("/cocktail_lists")
+
+@app.route("/add_list", methods=["GET", "POST"])
+@login_required
+def add_list():
+
+    #if request.method == "POST":
+    #    cocktail_data = request.form.get("cocktail_data")
+
+        #db.execute("INSERT INTO cocktail_lists (user_id, list_name, cocktail_id, cocktail_name, thumb_url) VALUES(?,?,?,?,?)", session["user_id"], cocktail_data["list_name"], cocktail_data["cocktail_id"], cocktail_data["cocktail_name"], cocktail_data["thumb_url"])
+    cocktail_data = request.form.get(cocktail_data)
+
+    flash(cocktail_data)
+    #flash(cocktail_data["cocktail_name"] + " has been added to following list: "+cocktail_data["list_name"])
+    return render_template("/cocktail_lists.html") # change this to return to cocktail_recipe
