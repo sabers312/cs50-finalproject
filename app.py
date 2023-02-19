@@ -299,11 +299,9 @@ def my_bar():
 @login_required
 def cocktail_lists():
 
-    my_cocktail_list = db.execute("SELECT * FROM cocktail_lists WHERE user_id = ?", session["user_id"])
     my_cocktail_lists = db.execute("SELECT * FROM list_names WHERE user_id = ? AND category = 'cocktail'", session["user_id"])
 
-    #flash(my_cocktail_list)
-    return render_template("cocktail_lists.html", my_cocktail_list=my_cocktail_list, my_cocktail_lists=my_cocktail_lists)
+    return render_template("cocktail_lists.html", my_cocktail_lists=my_cocktail_lists)
 
 
 @app.route("/create_list", methods=["GET", "POST"])
@@ -320,6 +318,23 @@ def create_list():
         return redirect("/cocktail_lists")
 
     return redirect("/cocktail_lists")
+
+
+@app.route("/delete_list", methods=["GET", "POST"])
+@login_required
+def delete_list():
+
+    if request.method == "POST":
+        category = "cocktail"
+        list_name = request.form.get("delete_item")
+
+        db.execute("DELETE FROM list_names WHERE user_id = ? AND category = ? AND name = ?", session["user_id"], category, list_name)
+
+        flash(list_name + " deleted from your cocktail lists!")
+        return redirect("/cocktail_lists")
+
+    return redirect("/cocktail_lists")
+
 
 @app.route("/add_list", methods=["GET", "POST"])
 @login_required
