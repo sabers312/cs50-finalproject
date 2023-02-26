@@ -136,8 +136,15 @@ def cocktail_recipe():
     #if request.args.get("create"):
     #    return redirect("/cocktail_lists")
 
+    cocktail = {}
 
-    cocktail = recipe_lu(request.args.get("idDrink"))
+    if request.args.get("cocktail_data"):
+        cocktail = recipe_lu(json.loads(request.args.get("cocktail_data"))["cocktail_id"])
+    else:
+        cocktail = recipe_lu(request.args.get("idDrink"))
+        
+    
+
 
     my_ingredients = db.execute("SELECT * FROM ingredients WHERE user_id = ?", session["user_id"])
     
@@ -340,12 +347,23 @@ def delete_list():
 @login_required
 def add_list():
 
-    #if request.method == "POST":
-    #    cocktail_data = request.form.get("cocktail_data")
+    cocktail_data = json.loads(request.args.get("cocktail_data"))
+    
+    category = "cocktail"
+    list_id = db.execute("SELECT id FROM list_names WHERE user_id = ? AND category = ? AND name = ?", session["user_id"], category, cocktail_data["list_name"])[0]
 
-        #db.execute("INSERT INTO cocktail_lists (user_id, list_name, cocktail_id, cocktail_name, thumb_url) VALUES(?,?,?,?,?)", session["user_id"], cocktail_data["list_name"], cocktail_data["cocktail_id"], cocktail_data["cocktail_name"], cocktail_data["thumb_url"])
-    cocktail_data = request.form.get(cocktail_data)
+    if db.execute("SELECT cocktail_id FROM cocktail_lists WHERE user_id = ? AND list_name = ? AND cocktail_name = ? ", session["user_id"], cocktail_data["list_name"], cocktail_data["cocktail_name"]):
+        flash(cocktail_data["cocktail_name"] + " is already in the following list: "+cocktail_data["list_name"])
+    else:
+        db.execute("INSERT INTO cocktail_lists (user_id, list_id, list_name, cocktail_id, cocktail_name, thumb_url) VALUES(?,?,?,?,?,?)", session["user_id"], list_id["id"], cocktail_data["list_name"], cocktail_data["cocktail_id"], cocktail_data["cocktail_name"], cocktail_data["thumb_url"])
+        flash(cocktail_data["cocktail_name"] + " has been added to the following list: "+cocktail_data["list_name"])    
+    
+    #cocktail = recipe_lu(cocktail_data["cocktail_id"])
 
-    flash(cocktail_data)
-    #flash(cocktail_data["cocktail_name"] + " has been added to following list: "+cocktail_data["list_name"])
-    return render_template("/cocktail_lists.html") # change this to return to cocktail_recipe
+    return redirect("/cocktail_lists") # change this to return to cocktail_recipe
+    #return redirect("/cocktail_recipe", cocktail=cocktail)
+
+
+"""Function to view cocktails in cocktail lists"""
+
+"""Function to delete cocktails in cocktail lists"""

@@ -81,8 +81,8 @@
                                             <option disabled selected>Choose list to add</option>
 
                                                 {% for list_item in my_cocktail_lists %}
-                                                    <option value='list_name={{ list_item["name"] }}&cocktail_id={{ cocktail["idDrink"] }}&cocktail_name={{ cocktail["strDrink"] }}&thumb_url={{ cocktail["strDrinkThumb"] }}'>{{ list_item["name"] }}</option>
-                                                {% endfor%}
+                                                    <option value='{"list_name":"{{ list_item["name"] }}","cocktail_id":"{{ cocktail["idDrink"] }}","cocktail_name":"{{ cocktail["strDrink"] }}","thumb_url":"{{ cocktail["strDrinkThumb"] }}"}''>{{ list_item["name"] }}</option>
+                                                    {% endfor%}
                                         </select>
                                         <button class="btn btn-outline-secondary" type="submit">Add</button>
                                     </div>
